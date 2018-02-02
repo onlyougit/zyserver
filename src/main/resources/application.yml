@@ -1,0 +1,115 @@
+#微信配置
+wechat:
+  appId: wx63ed1c31e6e60fff
+  appSecret: 737bd4e5b3b22c04046c4957648b332a
+  notifyUrl: http://47.96.18.156/serverInterface/wechat/orderCallback
+  partnerKey: 123
+  mchId: 123
+#Spring 配置 
+spring:
+  resources:
+    cache-period: 7200
+  session:
+    store-type: none
+  profiles:
+    active: dev
+# [服務配置]
+server:
+  port: 8088
+  #https 配置
+management:  
+  port: 54001  
+  health:  
+    mail:  
+      enabled: false 
+
+spring.jpa.database-platform: org.hibernate.dialect.MySQL5Dialect
+     
+spring.h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings: 
+        web-allow-others: true
+     
+---
+netpay: 
+  returnUrl: http://www.qdkj99.com/success.html
+  notifyUrl: http://www.qdkj99.com/serverInterface/netpay/verification
+https:
+  param:
+    sa:  QL81220
+    sapass: Gcb888888
+spring:
+  profiles: prod
+  jpa.show-sql: false
+  jpa.hibernate:
+    ddl-auto: none
+  devtools:
+    restart:
+      enabled: false
+spring.datasource:
+    name: zy
+    username: root
+    password: Gcb199107230513?
+    test-on-borrow: false
+    test-while-idle: true
+    test-on-return: false
+    time-between-eviction-runs-millis: 30000
+    min-evictable-idle-time-millis: 40000
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://116.62.130.69:3306/zy?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+
+      
+---
+netpay: 
+  returnUrl: http://47.96.18.156/success.html
+  notifyUrl: http://47.96.18.156/serverInterface/netpay/verification
+https:
+  param:
+    sa: GCB
+    sapass: 888888
+spring:
+  profiles: test
+  jpa.show-sql: false
+  jpa.hibernate:
+    ddl-auto: none
+  devtools:
+    restart:
+      enabled: false
+spring.datasource:
+    name: yyy
+    username: root
+    password: admin
+    test-on-borrow: false
+    test-while-idle: true
+    test-on-return: false
+    time-between-eviction-runs-millis: 30000
+    min-evictable-idle-time-millis: 40000
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.96.18.156:3306/yyy?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+
+---
+netpay: 
+  returnUrl: http://47.96.18.156/success.html
+  notifyUrl: http://47.96.18.156/serverInterface/netpay/verification
+https:
+  param:
+    sa: GCB
+    sapass: 888888
+spring:
+  profiles: dev
+  jpa.show-sql: true
+  jpa.hibernate:
+    ddl-auto: update
+spring.datasource:
+    name: yyy
+    username: root
+    password: admin
+    test-on-borrow: false
+    test-while-idle: true
+    test-on-return: false
+    time-between-eviction-runs-millis: 30000
+    min-evictable-idle-time-millis: 40000
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.96.18.156:3306/yyy?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true

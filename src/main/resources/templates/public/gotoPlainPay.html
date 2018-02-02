@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="Pragma" content="no-cache" />  
+<meta http-equiv="Expires" content="-1" />  
+<meta http-equiv="Cache-Control" content="no-cache" /> 
+<title>pay</title>
+<style>
+.box{ width:450px; height:240px; margin:0 auto; position:absolute; top:50%; left:50%; margin-top:-99px; margin-left:-225px; hidden-align:center;}
+</style>
+</head>
+<body>
+        <form id="payBillForm" action="#"  th:action="${reqUrl}" method="post">
+                <input type="hidden" name="inputCharset" th:value="${inputCharset}"/>
+                <input type="hidden" name="pickupUrl" th:value="${pickupUrl}"/>
+                <input type="hidden" name="receiveUrl" th:value="${receiveUrl}"/>
+                <input type="hidden" name="version" th:value="${version}"/>
+                <input type="hidden" name="language" th:value="${language}"/>
+                <input type="hidden" name="signType" th:value="${signType}"/>
+                <input type="hidden" name="merchantId" th:value="${merchantId}"/>
+                <input type="hidden" name="orderNo" th:value="${orderNo}"/>
+                <input type="hidden" name="orderAmount" th:value="${orderAmount}"/>
+                <input type="hidden" name="orderCurrency" th:value="${orderCurrency}"/>
+                <input type="hidden" name="orderDatetime" th:value="${orderDatetime}"/>
+                <input type="hidden" name="productName" th:value="${productName}"/>
+                <input type="hidden" name="ext2" th:value="${ext2}"/>
+                <input type="hidden" name="payType" th:value="${payType}"/>
+                <input type="hidden" name="signMsg" th:value="${signMsg}"/>
+        </form>
+</body>
+</html>
+ <script language="javascript" type="text/javascript">
+ window.onload=function(){
+ 	document.getElementById("payBillForm").submit();
+ }
+  </script>
