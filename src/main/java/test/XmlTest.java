@@ -1,9 +1,9 @@
 package test;
 
-import com.cwp.frontservice.pojo.Result;
-import com.cwp.frontservice.pojo.Root;
-import com.cwp.util.common.HttpsUtil;
-import com.cwp.util.common.MD5Util;
+import com.zyserver.frontservice.pojo.Result;
+import com.zyserver.frontservice.pojo.Root;
+import com.zyserver.util.common.HttpsUtil;
+import com.zyserver.util.common.MD5Util;
 
 public class XmlTest {
 	public  static final String hehe = "https://101.132.99.108:13134/queryaccount";
