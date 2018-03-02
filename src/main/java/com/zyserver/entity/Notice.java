@@ -21,10 +21,17 @@ public class Notice {
 	// 发布时间
 	@Column(name = "create_time")
 	private Date createTime;
-	// 后台用户
-	@OneToOne
-	@JoinColumn(name = "user_id", insertable = false, updatable = false)
-	private User user;
+	// 发布时间
+	@Column(name = "status")
+	private Integer status;
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -46,10 +53,6 @@ public class Notice {
 		this.createTime = createTime;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public Integer getId() {
 
 		return id;
@@ -69,9 +72,5 @@ public class Notice {
 
 	public Date getCreateTime() {
 		return createTime;
-	}
-
-	public User getUser() {
-		return user;
 	}
 }
