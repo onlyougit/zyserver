@@ -8,6 +8,7 @@ public class Notice {
 	
 	@Id
 	@Column(name = "id", updatable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	// 后台用户ID
 	@Column(name = "user_id")

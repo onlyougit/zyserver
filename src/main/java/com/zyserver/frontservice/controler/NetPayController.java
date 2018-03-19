@@ -1,5 +1,6 @@
 package com.zyserver.frontservice.controler;
 
+import com.zyserver.annotation.NeedSignIn;
 import com.zyserver.common.Constant;
 import com.zyserver.frontservice.pojo.NetPayResponse;
 import com.zyserver.frontservice.pojo.PaymentInfo;
@@ -28,7 +29,7 @@ public class NetPayController {
 	@Autowired
 	private INetPayService netPayService;
 	
-	//@NeedSignIn
+	@NeedSignIn
 	@RequestMapping(value = "/placeOrder")
 	public ModelAndView placeOrder(String customerId, BigDecimal amount) {
 		if(StringUtils.isEmpty(customerId) || StringUtils.isEmpty(amount)){

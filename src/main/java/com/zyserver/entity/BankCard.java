@@ -1,16 +1,13 @@
 package com.zyserver.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity(name = "t_bank_card")
 public class BankCard{
 	
 	@Id
-	@Column(name = "id", updatable = false)
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	// 客户ID
 	@Column(name = "customer_id")

@@ -9,6 +9,7 @@ import java.util.Date;
 @Entity(name = "t_verify_code")
 public class VerifyCodeEntity {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 

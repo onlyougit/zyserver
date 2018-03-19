@@ -22,4 +22,5 @@ public class Constant {
 	
 	
 	public static final String PAY_URL = "https://wanshangxing.com/index.php?app=smartepay";
+	public static final String PAYMENT_URL = "https://ebank.cloudi.vip/payment/v1/order/";
 }
