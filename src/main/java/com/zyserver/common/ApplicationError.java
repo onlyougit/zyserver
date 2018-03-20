@@ -27,6 +27,7 @@ public enum ApplicationError {
 	REAL_NAME_AUTHENTICATION("您的身份证已被占用", "3002"),
 	WITHDRAWAL_ERROR("提款金额不对", "3003"),
 	BANK_CARD_NOT_EXIST("银行卡不存在", "3004"),
+	EXIST_HANDING("有正在处理的申请，请联系客户经理", "3005"),
 	TOKEN_ERROR("认证失败","4001"),
 	TOKEN_NOTEXIST("token不存在", "4002"),
 	C_ERROR("报单失败","5001"),

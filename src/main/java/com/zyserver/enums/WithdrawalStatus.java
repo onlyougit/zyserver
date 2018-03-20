@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum WithdrawalStatus {
-	PENDING(1, "未处理"),
-	PROCESSING(2, "处理中"),
-	FINISH(3, "处理完成"),
-	REFUSE(4, "拒绝"),
-	FAILED(5, "处理失败"),
+    HANDING(0, "处理中"),
+
+    PASS(1, "通过"),
+
+    NOPOSS(2, "不通过"),
 
     ;
 

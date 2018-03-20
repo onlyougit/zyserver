@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum AuditStatus {
 	
-	WAIT_AUDIT(1, "待审核"),
-	AUDIT_PASS(2, "审核通过"),
-	AUDIT_FAILED(3, "审核失败"),
+	WAIT_AUDIT(0, "处理中"),
+	AUDIT_PASS(1, "通过"),
+	AUDIT_FAILED(2, "不通过"),
 
     ;
 

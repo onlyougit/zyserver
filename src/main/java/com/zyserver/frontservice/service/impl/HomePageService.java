@@ -32,7 +32,7 @@ public class HomePageService implements IHomePageService {
     @Autowired
     FundRepository cwpFundsRepository;
     @Autowired
-	DrawingApplyRepository cwpWithdrawalApplicationRepository;
+	DrawingApplyRepository drawingApplyRepository;
 	@Autowired
 	FundDetailRepository cwpFundsDetailsRepository;
 
@@ -95,6 +95,14 @@ public class HomePageService implements IHomePageService {
 	@Override
 	public ResponseJson<Object> addDrawApplication(Integer customerId,String amountMoney,String bankCardId) {
 		ResponseJson<Object> responseJson = new ResponseJson<>();
+		//判断当前客户是否有未处理的申请记录，有就提款失败
+		List<DrawingApply> drawingApplys = drawingApplyRepository.findByCustomerId(customerId);
+		long count = drawingApplys.stream().filter(w->w.getStatus()==WithdrawalStatus.HANDING.getCode()).count();
+		if(count>0){
+			responseJson.setCode(ApplicationError.EXIST_HANDING.getCode());
+			responseJson.setMsg(ApplicationError.EXIST_HANDING.getMessage());
+			return responseJson;
+		}
 		//判断提款金额小于等于余额，并且大于等于10
 		BigDecimal withdrawAmountMoney = new BigDecimal(amountMoney);
 		Fund cwpFunds = cwpFundsRepository.findByCustomerId(customerId);
@@ -102,7 +110,6 @@ public class HomePageService implements IHomePageService {
 			responseJson.setCode(ApplicationError.WITHDRAWAL_ERROR.getCode());
 			responseJson.setMsg(ApplicationError.WITHDRAWAL_ERROR.getMessage());
 			return responseJson;
-			
 		}
 		BankCard cwpBankCard = cwpBankCardRepository.findByBankCardId(bankCardId);
 		if(null == cwpBankCard){
@@ -116,8 +123,8 @@ public class HomePageService implements IHomePageService {
 		cwpWithdrawalApplication.setBankCardId(bankCardId);
 		cwpWithdrawalApplication.setCustomerId(customerId);
 		cwpWithdrawalApplication.setBank(cwpBankCard.getBankAddress());
-		cwpWithdrawalApplication.setStatus(WithdrawalStatus.PENDING.getCode());
-		cwpWithdrawalApplicationRepository.save(cwpWithdrawalApplication);
+		cwpWithdrawalApplication.setStatus(WithdrawalStatus.HANDING.getCode());
+		drawingApplyRepository.save(cwpWithdrawalApplication);
 		return responseJson;
 	}
 }
