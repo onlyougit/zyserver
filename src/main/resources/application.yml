@@ -12,7 +12,7 @@ spring:
   session:
     store-type: none
   profiles:
-    active: dev
+    active: prod
 # [服務配置]
 server:
   port: 8088

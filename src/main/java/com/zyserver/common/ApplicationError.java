@@ -34,7 +34,7 @@ public enum ApplicationError {
 	SMS_SEND_FAILED("短信发送失败","5002"),
 	VERIFICATIO_CODE_ERROR("验证码无效","5003"),
 	SEND_MOO_FREQUENTLY("验证码发送过于频繁","5004"),
-	INCOME_DEPOSIT_FAILED("入金失败","6001"),
+	INCOME_DEPOSIT_FAILED("交易时间段限制，操作失败","6001"),
 	EXPEND_DEPOSIT_FAILED("结算失败","6002"),
 	LACK_OF_FUNDS("余额不足","6003"),
 	NETPAY_ORDER_FAILED("支付失败","6004"),

@@ -36,3 +36,21 @@ vsftp安装目录：/etc/vsftpd
 启动vsftp服务：service vsftpd start
 查看服务名称：netstat -lptn或netstat -antup | grep ftp
 设置开机启动：chkconfig vsftpd on
+
+mysql备份：
+1、在home目录下创建执行脚本
+cd /home
+mkdir mysql_data_back
+cd mysql_data_back
+vim yyy.sh或touch yyy.sh vi yyy.sh
+输入：
+#!/bin/bash
+/usr/bin/mysqldump -uroot -padmin yyy > /home/mysqlbackup/yyy_$(date +%Y%m%d_%H%M%S).sql
+保存退出：shift zz
+设置权限：chmod a+x yyy.sh
+2、使用crontab定时备份
+crontab -e
+输入：00 16 * * * /home/mysqlbackup/yyy.sh >> /home/logs/mysqllog/auto-back.log【每天下午4点执行备份】
+保存退出
+service crontab restart
+如果提示：crontab: unrecognized service，那就这样启动：/sbin/service crond restart
