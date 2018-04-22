@@ -3,10 +3,12 @@ package com.zyserver.frontservice.service.impl;
 import com.zyserver.common.ApplicationError;
 import com.zyserver.common.ResponseJson;
 import com.zyserver.entity.*;
+import com.zyserver.enums.CustomerStatus;
 import com.zyserver.enums.WithdrawalStatus;
 import com.zyserver.frontservice.service.IHomePageService;
 import com.zyserver.repository.*;
 
+import com.zyserver.util.common.SMSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +37,8 @@ public class HomePageService implements IHomePageService {
 	DrawingApplyRepository drawingApplyRepository;
 	@Autowired
 	FundDetailRepository cwpFundsDetailsRepository;
+	@Autowired
+	CustomerRepository customerRepository;
 
 
 	@Override
@@ -95,6 +99,12 @@ public class HomePageService implements IHomePageService {
 	@Override
 	public ResponseJson<Object> addDrawApplication(Integer customerId,String amountMoney,String bankCardId) {
 		ResponseJson<Object> responseJson = new ResponseJson<>();
+		Customer customer = customerRepository.findById(customerId);
+		if(null == customer || customer.getStatus() == CustomerStatus.INVALID.getCode()){
+			responseJson.setCode(ApplicationError.CUSTOMER_NAME_ERROR.getCode());
+			responseJson.setMsg(ApplicationError.CUSTOMER_NAME_ERROR.getMessage());
+			return responseJson;
+		}
 		//判断当前客户是否有未处理的申请记录，有就提款失败
 		List<DrawingApply> drawingApplys = drawingApplyRepository.findByCustomerId(customerId);
 		long count = drawingApplys.stream().filter(w->w.getStatus()==WithdrawalStatus.HANDING.getCode()).count();
@@ -125,6 +135,20 @@ public class HomePageService implements IHomePageService {
 		cwpWithdrawalApplication.setBank(cwpBankCard.getBankAddress());
 		cwpWithdrawalApplication.setStatus(WithdrawalStatus.HANDING.getCode());
 		drawingApplyRepository.save(cwpWithdrawalApplication);
+		//发送短信
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("客户 ");
+		stringBuilder.append(customer.getCustomerRealName());
+		stringBuilder.append("  账号 ");
+		stringBuilder.append(customer.getCustomerPhone());
+		stringBuilder.append("，申请提款");
+		stringBuilder.append(amountMoney);
+		stringBuilder.append("元");
+		try {
+			SMSUtil.sendSMS(stringBuilder.toString(),customer.getCustomerPhone());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return responseJson;
 	}
 }
