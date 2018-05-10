@@ -4,44 +4,30 @@ import java.math.BigDecimal;
 
 public class Payment {
     //固定值online_pay
-    private String service;
+    private String version;
 
     private String merchantId;
 
-    private String notifyUrl;
-    //支付成功跳转URL
-    private String returnUrl;
-    //参数编码字符集
-    private String charset;
-    //商品的名称
-    private String title;
-    //商品的具体描述
-    private String body;
-    //商户订单号
-    private String orderNo;
-    //单位为RMB元
-    private BigDecimal totalFee;
-    //支付类型，固定值为1
-    private String paymentType;
-    //支付方式，directPay：直连模式；bankPay：收银台模式
-    private String paymethod;
-    //网银代码，当支付方式为bankPay时，该值为空；支付方式为directPay时该值必传
-    private String defaultbank;
-    //接入方式，当该值传“app”时，表示app接入，返回二维码地址，需商户自行生成二维码；值为“web”时，表示web接入，直接在收银台页面上显示二维码；值为“H5”时，表示手机端html5接入，会在手机端唤醒支付app
-    private String isApp;
+    private String merchantUrl;
+    //响应方式
+    private Integer responseMode;
+    private String orderId;
+    //货币类型
+    private String currencyType;
+    private BigDecimal amount;
+    //是否通过银生担保支付
+    private String assuredPay;
+    private String time;
+    private String remark;
+    private String mac;
+    private String merchantKey;
 
-    private String buyerEmail;
-    //签名方式 ：SHA
-    private String signType;
-
-    private String sign;
-
-    public String getService() {
-        return service;
+    public String getVersion() {
+        return version;
     }
 
-    public void setService(String service) {
-        this.service = service;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public String getMerchantId() {
@@ -52,115 +38,83 @@ public class Payment {
         this.merchantId = merchantId;
     }
 
-    public String getNotifyUrl() {
-        return notifyUrl;
+    public String getMerchantUrl() {
+        return merchantUrl;
     }
 
-    public void setNotifyUrl(String notifyUrl) {
-        this.notifyUrl = notifyUrl;
+    public void setMerchantUrl(String merchantUrl) {
+        this.merchantUrl = merchantUrl;
     }
 
-    public String getReturnUrl() {
-        return returnUrl;
+    public Integer getResponseMode() {
+        return responseMode;
     }
 
-    public void setReturnUrl(String returnUrl) {
-        this.returnUrl = returnUrl;
+    public void setResponseMode(Integer responseMode) {
+        this.responseMode = responseMode;
     }
 
-    public String getCharset() {
-        return charset;
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setCharset(String charset) {
-        this.charset = charset;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getCurrencyType() {
+        return currencyType;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCurrencyType(String currencyType) {
+        this.currencyType = currencyType;
     }
 
-    public String getBody() {
-        return body;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getAssuredPay() {
+        return assuredPay;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setAssuredPay(String assuredPay) {
+        this.assuredPay = assuredPay;
     }
 
-    public BigDecimal getTotalFee() {
-        return totalFee;
+    public String getTime() {
+        return time;
     }
 
-    public void setTotalFee(BigDecimal totalFee) {
-        this.totalFee = totalFee;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public String getPaymentType() {
-        return paymentType;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
-    public String getPaymethod() {
-        return paymethod;
+    public String getMac() {
+        return mac;
     }
 
-    public void setPaymethod(String paymethod) {
-        this.paymethod = paymethod;
+    public void setMac(String mac) {
+        this.mac = mac;
     }
 
-    public String getDefaultbank() {
-        return defaultbank;
+    public String getMerchantKey() {
+        return merchantKey;
     }
 
-    public void setDefaultbank(String defaultbank) {
-        this.defaultbank = defaultbank;
-    }
-
-    public String getIsApp() {
-        return isApp;
-    }
-
-    public void setIsApp(String isApp) {
-        this.isApp = isApp;
-    }
-
-    public String getBuyerEmail() {
-        return buyerEmail;
-    }
-
-    public void setBuyerEmail(String buyerEmail) {
-        this.buyerEmail = buyerEmail;
-    }
-
-    public String getSignType() {
-        return signType;
-    }
-
-    public void setSignType(String signType) {
-        this.signType = signType;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
+    public void setMerchantKey(String merchantKey) {
+        this.merchantKey = merchantKey;
     }
 }

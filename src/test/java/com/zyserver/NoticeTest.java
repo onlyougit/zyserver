@@ -1,6 +1,7 @@
 package com.zyserver;
 import com.zyserver.common.ResponseJson;
 import com.zyserver.frontservice.service.INoticeService;
+import com.zyserver.util.common.MD5Util;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ public class NoticeTest {
 
     @Test
     public void queryNotice() {
-        ResponseJson<Object> responseJson = noticeService.queryNotice();
-        System.out.println();
+        System.out.println(MD5Util.HEXAndMd5("fjsdf=7899"));
     }
 }

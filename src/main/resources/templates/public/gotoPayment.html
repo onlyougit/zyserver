@@ -11,27 +11,24 @@
 </style>
 </head>
 <body>
-        <form id="payBillForm" action="#"  th:action="${reqUrl}" method="post">
-                <input type="hidden" name="service" th:value="${service}"/>
+        <form id="payForm" action="#"  th:action="${reqUrl}" method="post">
+                <input type="hidden" name="version" th:value="${version}"/>
                 <input type="hidden" name="merchantId" th:value="${merchantId}"/>
-                <input type="hidden" name="notifyUrl" th:value="${notifyUrl}"/>
-                <input type="hidden" name="returnUrl" th:value="${returnUrl}"/>
-                <input type="hidden" name="charset" th:value="${charset}"/>
-                <input type="hidden" name="title" th:value="${title}"/>
-                <input type="hidden" name="body" th:value="${body}"/>
-                <input type="hidden" name="orderNo" th:value="${orderNo}"/>
-                <input type="hidden" name="totalFee" th:value="${totalFee}"/>
-                <input type="hidden" name="paymentType" th:value="${paymentType}"/>
-                <input type="hidden" name="paymethod" th:value="${paymethod}"/>
-                <input type="hidden" name="defaultbank" th:value="${defaultbank}"/>
-                <input type="hidden" name="isApp" th:value="${isApp}"/>
-                <input type="hidden" name="signType" th:value="${signType}"/>
-                <input type="hidden" name="sign" th:value="${sign}"/>
+                <input type="hidden" name="merchantUrl" th:value="${merchantUrl}"/>
+                <input type="hidden" name="responseMode" th:value="${responseMode}"/>
+                <input type="hidden" name="orderId" th:value="${orderId}"/>
+                <input type="hidden" name="currencyType" th:value="${currencyType}"/>
+                <input type="hidden" name="amount" th:value="${amount}"/>
+                <input type="hidden" name="assuredPay" th:value="${assuredPay}"/>
+                <input type="hidden" name="time" th:value="${time}"/>
+                <input type="hidden" name="remark" th:value="${remark}"/>
+                <input type="hidden" name="mac" th:value="${mac}"/>
+                <input type="hidden" name="merchantKey" th:value="${merchantKey}"/>
         </form>
 </body>
 </html>
  <script language="javascript" type="text/javascript">
  window.onload=function(){
- 	document.getElementById("payBillForm").submit();
+ 	document.getElementById("payForm").submit();
  }
   </script>
