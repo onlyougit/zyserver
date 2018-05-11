@@ -1,6 +1,7 @@
 package com.zyserver.frontservice.service.impl;
 
 import com.zyserver.common.ApplicationError;
+import com.zyserver.common.Constant;
 import com.zyserver.common.ResponseJson;
 import com.zyserver.entity.BankCard;
 import com.zyserver.entity.Customer;
@@ -61,7 +62,7 @@ public class BankService implements IBankService {
 		stringBuilder.append(")");
 		stringBuilder.append("正在申请银行卡审核");
 		try {
-			SMSUtil.sendSMS(stringBuilder.toString(),customer.getCustomerPhone());
+			SMSUtil.sendSMS(stringBuilder.toString(), Constant.FINANCE_MOBILE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

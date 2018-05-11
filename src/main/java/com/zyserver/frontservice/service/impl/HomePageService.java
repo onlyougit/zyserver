@@ -1,6 +1,7 @@
 package com.zyserver.frontservice.service.impl;
 
 import com.zyserver.common.ApplicationError;
+import com.zyserver.common.Constant;
 import com.zyserver.common.ResponseJson;
 import com.zyserver.entity.*;
 import com.zyserver.enums.CustomerStatus;
@@ -145,7 +146,7 @@ public class HomePageService implements IHomePageService {
 		stringBuilder.append(amountMoney);
 		stringBuilder.append("元");
 		try {
-			SMSUtil.sendSMS(stringBuilder.toString(),customer.getCustomerPhone());
+			SMSUtil.sendSMS(stringBuilder.toString(), Constant.FINANCE_MOBILE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
