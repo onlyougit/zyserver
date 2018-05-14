@@ -22,12 +22,14 @@ import java.util.Date;
 public class PaymentService implements IPaymentService {
 
 	public static final Logger log = LoggerFactory.getLogger(PaymentService.class);
-	public static final String MERCHANT_ID = "1120180419172457001";
-	public static final String MERCHANT_KEY = "123456abc";
+	public static final String MERCHANT_ID = "2120180428164017001";
+	public static final String MERCHANT_KEY = "dy051226";
 	public static final String MERCHANT_URL = "http://payfor.chundongh.cn/serverInterface/payment/responseData";
-	public static final Integer RESPONSE_MODE = 1;
+	public static final Integer RESPONSE_MODE = 2;
 	public static final String CURRENCY_TYPE = "CNY";
-	public static final String REMARK = "remark";
+	public static final String REMARK = "";
+	public static final String ASSURED_PAY = "false";
+
 	@Autowired
 	private NetpayFlowRepository netpayFlowRepository;
 	@Autowired
@@ -68,11 +70,11 @@ public class PaymentService implements IPaymentService {
 		payment.setOrderId(orderId);
 		payment.setCurrencyType(CURRENCY_TYPE);
 		payment.setAmount(amount);
-		payment.setAssuredPay("");
+		payment.setAssuredPay(ASSURED_PAY);
 		payment.setTime(orderId);
 		payment.setRemark(REMARK);
 		payment.setMerchantKey(MERCHANT_KEY);
-		payment.setMac(getMac(MERCHANT_ID,MERCHANT_URL,RESPONSE_MODE,orderId,CURRENCY_TYPE,amount,"",orderId,REMARK,MERCHANT_KEY));
+		payment.setMac(getMac(MERCHANT_ID,MERCHANT_URL,RESPONSE_MODE,orderId,CURRENCY_TYPE,amount,"",orderId,REMARK,MERCHANT_KEY).toUpperCase());
 		return payment;
 	}
 

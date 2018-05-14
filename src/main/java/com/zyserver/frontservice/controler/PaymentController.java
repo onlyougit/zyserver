@@ -43,7 +43,12 @@ public class PaymentController {
 		map.put("remark", payment.getRemark());
 		map.put("mac", payment.getMac());
 		map.put("merchantKey", payment.getMerchantKey());
+		map.put("b2b","true");
+		map.put("bankCode","cmbc");
 		map.put("reqUrl", "https://www.unspay.com/unspay/page/linkbank/payRequest.do");
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			System.out.println(entry.getKey() + ":"+ entry.getValue());
+		}
 		return new ModelAndView("public/gotoPayment", map);
 	}
 
