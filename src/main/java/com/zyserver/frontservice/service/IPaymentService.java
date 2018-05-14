@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public interface IPaymentService {
 
-	Payment placeOrder(String customerId, BigDecimal amount);
+	Payment placeOrder(String customerId, BigDecimal amount,String bankCard);
 
     boolean verification(PaymentResponse paymentResponse);
 }

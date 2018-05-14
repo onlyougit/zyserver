@@ -24,7 +24,7 @@ public class PaymentService implements IPaymentService {
 	public static final Logger log = LoggerFactory.getLogger(PaymentService.class);
 	public static final String MERCHANT_ID = "2120180428164017001";
 	public static final String MERCHANT_KEY = "dy051226";
-	public static final String MERCHANT_URL = "http://payfor.chundongh.cn/serverInterface/payment/responseData";
+	public static final String MERCHANT_URL = "http://pay.cdx.com/account/payment/rest/unspay/";
 	public static final Integer RESPONSE_MODE = 2;
 	public static final String CURRENCY_TYPE = "CNY";
 	public static final String REMARK = "";
@@ -41,7 +41,7 @@ public class PaymentService implements IPaymentService {
 	
 	
 	@Override
-	public Payment placeOrder(String customerId, BigDecimal amount) {
+	public Payment placeOrder(String customerId, BigDecimal amount,String bankCard) {
 		log.info("支付接口请求开始>>>>>>>>>>>>>>>>>>>");
 		Payment payment = createPaymentInfo(amount);
 		NetpayFlow netpayFlow = new NetpayFlow();
@@ -50,7 +50,7 @@ public class PaymentService implements IPaymentService {
 		netpayFlow.setOrderId(payment.getOrderId());
 		netpayFlow.setCreateTime(new Date());
 		netpayFlow.setAmount(payment.getAmount().toString());
-		netpayFlowRepository.save(netpayFlow);
+		//netpayFlowRepository.save(netpayFlow);
 		return payment;
 	}
 
@@ -65,21 +65,20 @@ public class PaymentService implements IPaymentService {
 		payment.setMerchantId(MERCHANT_ID);
 		payment.setMerchantUrl(MERCHANT_URL);
 		payment.setResponseMode(RESPONSE_MODE);
-		payment.setMerchantId(MERCHANT_ID);
-		String orderId = getCurrentDateTimeStr();
+		String orderId = "zy"+getCurrentDateTimeStr();
 		payment.setOrderId(orderId);
 		payment.setCurrencyType(CURRENCY_TYPE);
 		payment.setAmount(amount);
 		payment.setAssuredPay(ASSURED_PAY);
-		payment.setTime(orderId);
+		payment.setTime(getCurrentDateTimeStr());
 		payment.setRemark(REMARK);
 		payment.setMerchantKey(MERCHANT_KEY);
-		payment.setMac(getMac(MERCHANT_ID,MERCHANT_URL,RESPONSE_MODE,orderId,CURRENCY_TYPE,amount,"",orderId,REMARK,MERCHANT_KEY).toUpperCase());
+		payment.setMac(getMac(MERCHANT_ID,MERCHANT_URL,RESPONSE_MODE,orderId,CURRENCY_TYPE,amount,ASSURED_PAY,getCurrentDateTimeStr(),REMARK,MERCHANT_KEY).toUpperCase());
 		return payment;
 	}
 
 	public String getMac(String merchantId, String merchantUrl, Integer responseMode, String orderId, String currencyType, BigDecimal amount,
-						  String assuredPay, String orderId1, String remark, String merchantKey) {
+						  String assuredPay, String time, String remark, String merchantKey) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("merchantId=");
 		sb.append(merchantId);
@@ -96,7 +95,7 @@ public class PaymentService implements IPaymentService {
 		sb.append("&assuredPay=");
 		sb.append(assuredPay);
 		sb.append("&time=");
-		sb.append(orderId1);
+		sb.append(time);
 		sb.append("&remark=");
 		sb.append(remark);
 		sb.append("&merchantKey=");
