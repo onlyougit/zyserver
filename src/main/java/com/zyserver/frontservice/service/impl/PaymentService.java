@@ -1,6 +1,11 @@
 package com.zyserver.frontservice.service.impl;
 
+import com.zyserver.entity.Fund;
+import com.zyserver.entity.FundDetail;
 import com.zyserver.entity.NetpayFlow;
+import com.zyserver.entity.Recharge;
+import com.zyserver.enums.FlowWay;
+import com.zyserver.enums.RechargeWay;
 import com.zyserver.frontservice.pojo.Payment;
 import com.zyserver.frontservice.pojo.PaymentResponse;
 import com.zyserver.frontservice.service.IPaymentService;
@@ -24,7 +29,7 @@ public class PaymentService implements IPaymentService {
 	public static final Logger log = LoggerFactory.getLogger(PaymentService.class);
 	public static final String MERCHANT_ID = "2120180428164017001";
 	public static final String MERCHANT_KEY = "dy051226";
-	public static final String MERCHANT_URL = "http://pay.cdx.com/account/payment/rest/unspay/";
+	public static final String MERCHANT_URL = "http://payfor.chundongh.cn/serverInterface/payment/responseData";
 	public static final Integer RESPONSE_MODE = 2;
 	public static final String CURRENCY_TYPE = "CNY";
 	public static final String REMARK = "";
@@ -41,22 +46,63 @@ public class PaymentService implements IPaymentService {
 	
 	
 	@Override
-	public Payment placeOrder(String customerId, BigDecimal amount,String bankCard) {
+	public Payment placeOrder(Integer customerId, BigDecimal amount,String bankCard) {
 		log.info("支付接口请求开始>>>>>>>>>>>>>>>>>>>");
 		Payment payment = createPaymentInfo(amount);
 		NetpayFlow netpayFlow = new NetpayFlow();
-		netpayFlow.setCustomerId(Integer.parseInt(customerId));
+		netpayFlow.setCustomerId(customerId);
 		netpayFlow.setMerchantId(MERCHANT_ID);
 		netpayFlow.setOrderId(payment.getOrderId());
 		netpayFlow.setCreateTime(new Date());
 		netpayFlow.setAmount(payment.getAmount().toString());
-		//netpayFlowRepository.save(netpayFlow);
+		netpayFlowRepository.save(netpayFlow);
 		return payment;
 	}
 
 	@Override
 	public boolean verification(PaymentResponse paymentResponse) {
-		return false;
+		//查询交易流水
+		NetpayFlow netpayFlow = netpayFlowRepository.findByOrderId(paymentResponse.getOrderId());
+		//判断金额
+		if(!new BigDecimal(netpayFlow.getAmount()).equals(paymentResponse.getAmount())){
+			log.info("支付金额不匹配");
+			return false;
+		}
+		//判断mac
+		String sign = getSign(paymentResponse.getMerchantId(),paymentResponse.getResponseMode(),paymentResponse.getOrderId(),
+				paymentResponse.getCurrencyType(),paymentResponse.getAmount(),paymentResponse.getReturnCode(),paymentResponse.getReturnMessage(),MERCHANT_KEY);
+		if(!paymentResponse.getMac().equalsIgnoreCase(sign)){
+			log.info("验证签名失败");
+			return false;
+		}
+		//更新交易流水
+		netpayFlow.setModifyTime(new Date());
+		netpayFlowRepository.save(netpayFlow);
+		//往充值表加一条数据
+		Recharge recharge = new Recharge();
+		recharge.setCustomerId(netpayFlow.getCustomerId());
+		recharge.setOrderId(paymentResponse.getOrderId());
+		recharge.setRechargeAmount(paymentResponse.getAmount());
+		recharge.setRechargeTime(new Date());
+		recharge.setRechargeWay(RechargeWay.ONLINEBANKING.getCode());
+		recharge.setRemark(RechargeWay.ONLINEBANKING.getText());
+		rechargeRepository.save(recharge);
+		//更余额
+		Fund fund = fundRepository.findByCustomerId(netpayFlow.getCustomerId());
+		if(null != fund){
+			fund.setBalance(fund.getBalance().add(paymentResponse.getAmount()).setScale(2,BigDecimal.ROUND_HALF_UP));
+			fundRepository.save(fund);
+			//添加资金明细
+			FundDetail fundDetail = new FundDetail();
+			fundDetail.setChangeAmount(paymentResponse.getAmount());
+			fundDetail.setChangeTime(new Date());
+			fundDetail.setCustomerId(netpayFlow.getCustomerId());
+			fundDetail.setChargeAmount(fund.getBalance());
+			fundDetail.setFlowWay(FlowWay.INCOME.getCode());
+			fundDetail.setRemark("银生网银充值");
+			fundDetailRepository.save(fundDetail);
+		}
+		return true;
 	}
 
 	public Payment createPaymentInfo(BigDecimal amount){

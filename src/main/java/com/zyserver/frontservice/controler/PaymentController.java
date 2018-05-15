@@ -25,8 +25,8 @@ public class PaymentController {
 	
 	//@NeedSignIn
 	@RequestMapping(value = "/placeOrder")
-	public ModelAndView placeOrder(String customerId, BigDecimal amount,String bankCard) {
-		if(StringUtils.isEmpty(customerId) || StringUtils.isEmpty(amount)){
+	public ModelAndView placeOrder(Integer customerId, BigDecimal amount,String bankCard) {
+		if(StringUtils.isEmpty(customerId) || StringUtils.isEmpty(amount) || StringUtils.isEmpty(bankCard)){
 			return null;
 		}
 		Payment payment = paymentService.placeOrder(customerId, amount,bankCard);
@@ -46,21 +46,34 @@ public class PaymentController {
 		map.put("b2b","true");
 		map.put("bankCode",bankCard);
 		map.put("reqUrl", "https://www.unspay.com/unspay/page/linkbank/payRequest.do");
-		for (Map.Entry<String, Object> entry : map.entrySet()) {
-			log.info(entry.getKey() + ":"+ entry.getValue());
-		}
 		return new ModelAndView("public/gotoPayment", map);
 	}
 
 	@RequestMapping(value = "/responseData")
 	@ResponseBody
 	public String responseData(PaymentResponse paymentResponse){
+		//PaymentResponse{
+		// merchantId='2120180428164017001',
+		// responseMode=2,
+		// orderId='zy20180515100444',
+		// currencyType='CNY',
+		// amount=0.10,
+		// returnCode='0000',
+		// returnMessage='',
+		// merchantKey='null',
+		// mac='14607486183C9D19E9EC7839D96777A0',
+		// bankCode='abc_unionpay_cq_d'}
 		log.info(paymentResponse.toString());
-		boolean result = paymentService.verification(paymentResponse);
-		if(result){
-			return "success";
+		if(paymentResponse.getReturnCode().equalsIgnoreCase("0000")){
+			boolean result = paymentService.verification(paymentResponse);
+			log.info("支付回调结果："+result);
+			if(result){
+				return "success";
+			}else{
+				return "failed";
+			}
 		}else{
-			return "failed";
+			return "success";
 		}
 	}
 }
