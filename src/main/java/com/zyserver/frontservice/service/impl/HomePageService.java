@@ -114,10 +114,12 @@ public class HomePageService implements IHomePageService {
 			responseJson.setMsg(ApplicationError.EXIST_HANDING.getMessage());
 			return responseJson;
 		}
-		//判断提款金额小于等于余额，并且大于等于10
+		//判断提款金额小于等于余额，并且大于等于10,小于等于50000
 		BigDecimal withdrawAmountMoney = new BigDecimal(amountMoney);
 		Fund cwpFunds = cwpFundsRepository.findByCustomerId(customerId);
-		if(withdrawAmountMoney.compareTo(cwpFunds.getBalance())>0 || withdrawAmountMoney.compareTo(new BigDecimal("10"))<0){
+		if(withdrawAmountMoney.compareTo(cwpFunds.getBalance())>0 ||
+				withdrawAmountMoney.compareTo(new BigDecimal("10"))<0 ||
+				withdrawAmountMoney.compareTo(new BigDecimal("50000"))>0){
 			responseJson.setCode(ApplicationError.WITHDRAWAL_ERROR.getCode());
 			responseJson.setMsg(ApplicationError.WITHDRAWAL_ERROR.getMessage());
 			return responseJson;
