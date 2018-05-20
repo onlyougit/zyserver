@@ -102,6 +102,7 @@ public class PaymentService implements IPaymentService {
 			fundDetail.setRemark("银生网银充值");
 			fundDetailRepository.save(fundDetail);
 		}
+		log.info("网银支付成功");
 		return true;
 	}
 
