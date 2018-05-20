@@ -26,7 +26,8 @@ public class SmsTest {
         sb.append("dy051226");
         String mac = MD5Util.HEXAndMd5(sb.toString());
         System.out.println(mac.toUpperCase());*/
-        BigDecimal bigDecimal = new BigDecimal("0.100");
-        System.out.println(bigDecimal.toString());
+        BigDecimal bigDecimal1 = new BigDecimal("100");
+        BigDecimal bigDecimal2 = new BigDecimal("100");
+        System.out.println(bigDecimal1.multiply(new BigDecimal("0.995")));
     }
 }

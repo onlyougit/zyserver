@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/serverInterface/homePage")
 public class HomePageController {
@@ -73,9 +75,11 @@ public class HomePageController {
 	@RequestMapping(value = "/withdrawalsApply",method=RequestMethod.POST)
     public ResponseJson<Object> withdrawalsApply(Integer customerId,String amountMoney,String bankCardId){
 		ResponseJson<Object> responseJson = new ResponseJson<>();
+		BigDecimal amount = new BigDecimal(amountMoney);
 		if(StringUtils.isEmpty(customerId) ||
 				StringUtils.isEmpty(amountMoney) ||
-				StringUtils.isEmpty(bankCardId)){
+				StringUtils.isEmpty(bankCardId) ||
+				amount.compareTo(new BigDecimal("50000"))>0){
 			responseJson.setCode(ApplicationError.PARAMETER_ERROR.getCode());
 			responseJson.setMsg(ApplicationError.PARAMETER_ERROR.getMessage());
 			return responseJson;

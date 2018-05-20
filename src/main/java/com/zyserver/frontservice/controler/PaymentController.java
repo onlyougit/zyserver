@@ -29,6 +29,11 @@ public class PaymentController {
 		if(StringUtils.isEmpty(customerId) || StringUtils.isEmpty(amount) || StringUtils.isEmpty(bankCard)){
 			return null;
 		}
+		//判断金额必须是100的整数倍
+		if(amount.compareTo(new BigDecimal("100"))>=0 && amount.divideAndRemainder(new BigDecimal("100"))[1].equals(new BigDecimal("0"))){
+			return null;
+		}
+		amount = amount.multiply(new BigDecimal("0.995")).setScale(2,BigDecimal.ROUND_HALF_UP);
 		Payment payment = paymentService.placeOrder(customerId, amount,bankCard);
 		Map<String, Object> map = new HashMap<>();
 		map.put("version", payment.getVersion());
