@@ -1,5 +1,8 @@
 package com.zyserver.frontservice.controler;
 
+import com.zyserver.annotation.NeedSignIn;
+import com.zyserver.common.ApplicationError;
+import com.zyserver.common.ResponseJson;
 import com.zyserver.frontservice.pojo.Payment;
 import com.zyserver.frontservice.pojo.PaymentResponse;
 import com.zyserver.frontservice.service.IPaymentService;
@@ -23,17 +26,25 @@ public class PaymentController {
 	@Autowired
 	private IPaymentService paymentService;
 	
-	//@NeedSignIn
-	@RequestMapping(value = "/placeOrder")
-	public ModelAndView placeOrder(Integer customerId, BigDecimal amount,String bankCard) {
+	@RequestMapping(value = "/verification")
+	public ResponseJson<Object> verification(Integer customerId, BigDecimal amount,String bankCard) {
+		ResponseJson<Object> responseJson = new ResponseJson<>();
 		if(StringUtils.isEmpty(customerId) || StringUtils.isEmpty(amount) || StringUtils.isEmpty(bankCard)){
-			return null;
+			responseJson.setCode(ApplicationError.PARAMETER_ERROR.getCode());
+			responseJson.setMsg(ApplicationError.PARAMETER_ERROR.getMessage());
+			return responseJson;
 		}
 		//判断金额必须是100的整数倍
-		if(amount.compareTo(new BigDecimal("100"))>=0 && amount.divideAndRemainder(new BigDecimal("100"))[1].equals(new BigDecimal("0"))){
-			return null;
+		if(amount.compareTo(new BigDecimal("100"))<0 || !amount.divideAndRemainder(new BigDecimal("100"))[1].equals(new BigDecimal("0"))){
+			responseJson.setCode(ApplicationError.RECHARGE_AMOUNT_ERROR.getCode());
+			responseJson.setMsg(ApplicationError.RECHARGE_AMOUNT_ERROR.getMessage());
+			return responseJson;
 		}
-		amount = amount.multiply(new BigDecimal("0.995")).setScale(2,BigDecimal.ROUND_HALF_UP);
+		return responseJson;
+	}
+
+	@RequestMapping(value = "/placeOrder")
+		public ModelAndView placeOrder(Integer customerId, BigDecimal amount,String bankCard) {
 		Payment payment = paymentService.placeOrder(customerId, amount,bankCard);
 		Map<String, Object> map = new HashMap<>();
 		map.put("version", payment.getVersion());

@@ -64,17 +64,19 @@ public class PaymentService implements IPaymentService {
 		//查询交易流水
 		NetpayFlow netpayFlow = netpayFlowRepository.findByOrderId(paymentResponse.getOrderId());
 		//判断金额
-		if(!new BigDecimal(netpayFlow.getAmount()).equals(paymentResponse.getAmount())){
+		if(new BigDecimal(netpayFlow.getAmount()).compareTo(paymentResponse.getAmount())!=0){
 			log.info("支付金额不匹配");
 			return false;
 		}
 		//判断mac
 		String sign = getSign(paymentResponse.getMerchantId(),paymentResponse.getResponseMode(),paymentResponse.getOrderId(),
 				paymentResponse.getCurrencyType(),paymentResponse.getAmount(),paymentResponse.getReturnCode(),paymentResponse.getReturnMessage(),MERCHANT_KEY);
+		log.info("本地Mac："+sign+";三方Mac："+paymentResponse.getMac());
 		if(!paymentResponse.getMac().equalsIgnoreCase(sign)){
 			log.info("验证签名失败");
 			return false;
 		}
+		BigDecimal amount = paymentResponse.getAmount().multiply(new BigDecimal("0.995")).setScale(2,BigDecimal.ROUND_HALF_UP);
 		//更新交易流水
 		netpayFlow.setModifyTime(new Date());
 		netpayFlowRepository.save(netpayFlow);
@@ -82,7 +84,7 @@ public class PaymentService implements IPaymentService {
 		Recharge recharge = new Recharge();
 		recharge.setCustomerId(netpayFlow.getCustomerId());
 		recharge.setOrderId(paymentResponse.getOrderId());
-		recharge.setRechargeAmount(paymentResponse.getAmount());
+		recharge.setRechargeAmount(amount);
 		recharge.setRechargeTime(new Date());
 		recharge.setRechargeWay(RechargeWay.ONLINEBANKING.getCode());
 		recharge.setRemark(RechargeWay.ONLINEBANKING.getText());
@@ -90,11 +92,11 @@ public class PaymentService implements IPaymentService {
 		//更余额
 		Fund fund = fundRepository.findByCustomerId(netpayFlow.getCustomerId());
 		if(null != fund){
-			fund.setBalance(fund.getBalance().add(paymentResponse.getAmount()).setScale(2,BigDecimal.ROUND_HALF_UP));
+			fund.setBalance(fund.getBalance().add(amount).setScale(2,BigDecimal.ROUND_HALF_UP));
 			fundRepository.save(fund);
 			//添加资金明细
 			FundDetail fundDetail = new FundDetail();
-			fundDetail.setChangeAmount(paymentResponse.getAmount());
+			fundDetail.setChangeAmount(amount);
 			fundDetail.setChangeTime(new Date());
 			fundDetail.setCustomerId(netpayFlow.getCustomerId());
 			fundDetail.setChargeAmount(fund.getBalance());

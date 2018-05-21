@@ -12,7 +12,7 @@ spring:
   session:
     store-type: none
   profiles:
-    active: prod
+    active: dev
 # [服務配置]
 server:
   port: 8088
@@ -38,8 +38,8 @@ netpay:
   notifyUrl: http://www.qdkj99.com/serverInterface/netpay/verification
 https:
   param:
-    sa:  QL81220
-    sapass: Gcb888888
+    sa: QL81035
+    sapass: 123456
 spring:
   profiles: prod
   jpa.show-sql: false

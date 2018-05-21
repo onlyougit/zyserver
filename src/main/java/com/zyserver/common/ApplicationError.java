@@ -39,6 +39,7 @@ public enum ApplicationError {
 	LACK_OF_FUNDS("余额不足","6003"),
 	NETPAY_ORDER_FAILED("支付失败","6004"),
 	WECHAT_ORDER_FAILED("预支付订单生成失败","7001"),
+	RECHARGE_AMOUNT_ERROR("充值金额必须大于100，必须是100的整数倍","8001"),
 	;
 	private String message;
 	private String code;

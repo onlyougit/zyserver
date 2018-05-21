@@ -131,10 +131,10 @@ public class LoginService implements ILoginService {
 			}
 			String group = "";
 			String source1 = "";
-			if("QL81220".equalsIgnoreCase(sa)){
+			if("QL81035".equalsIgnoreCase(sa)){
 				User user = userRepository.findOne(agent.getLoginId());
 				group = user.getUserName();
-				source1 = "81220999";
+				source1 = "81035999";
 				log.info("sa="+sa+";pass="+sapass+";group="+user.getUserName());
 			}
 			log.info("sa="+sa+";pass="+sapass);
