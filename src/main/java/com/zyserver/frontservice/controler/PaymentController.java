@@ -27,6 +27,7 @@ public class PaymentController {
 	private IPaymentService paymentService;
 	
 	@RequestMapping(value = "/verification")
+	@ResponseBody
 	public ResponseJson<Object> verification(Integer customerId, BigDecimal amount,String bankCard) {
 		ResponseJson<Object> responseJson = new ResponseJson<>();
 		if(StringUtils.isEmpty(customerId) || StringUtils.isEmpty(amount) || StringUtils.isEmpty(bankCard)){
