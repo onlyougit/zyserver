@@ -19,12 +19,12 @@ import java.security.cert.X509Certificate;
 
 public class HttpsUtil {
 
-	private static final String ACCOUNT_URL = "https://101.132.99.108:13134/createaccount";
-	private static final String BOND_URL = "https://101.132.99.108:13134/setmarginrate";
-	private static final String SERVICE_CHARGE_URL = "https://101.132.99.108:13134/setcommissionrate";
-	private static final String RISK_URL = "https://101.132.99.108:13134/setriskcontrol";
-	private static final String DEPOSIT_URL = "https://101.132.99.108:13134/deposit";
-	private static final String QUERY_DEPOSIT_URL = "https://101.132.99.108:13134/queryaccount";
+	private static final String ACCOUNT_URL = "https://106.14.206.197:13134/createaccount";
+	private static final String BOND_URL = "https://106.14.206.197:13134/setmarginrate";
+	private static final String SERVICE_CHARGE_URL = "https://106.14.206.197:13134/setcommissionrate";
+	private static final String RISK_URL = "https://106.14.206.197:13134/setriskcontrol";
+	private static final String DEPOSIT_URL = "https://106.14.206.197:13134/deposit";
+	private static final String QUERY_DEPOSIT_URL = "https://106.14.206.197:13134/queryaccount";
 	public static final String CREDIT_VALUE = "0";
 	
 	final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
