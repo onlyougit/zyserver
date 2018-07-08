@@ -26,4 +26,6 @@ public interface ILoginService {
 	ResponseJson<Object> queryCustomerByToken(String token);
 
 	ResponseJson<Object> isRealName(Integer customerId);
+
+    ResponseJson<Object> registrationByUserName(String phone, String userName, String password, String code);
 }

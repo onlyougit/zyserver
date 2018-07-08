@@ -6,4 +6,5 @@ import com.zyserver.entity.Agent;
 
 public interface AgentRepository extends JpaRepository<Agent,Integer>,JpaSpecificationExecutor<Agent> {
 
+    Agent findByLoginId(Integer userId);
 }

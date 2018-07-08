@@ -16,6 +16,7 @@ public enum ApplicationError {
 	NOT_REAL_NAME_AUTHENTICATION("未实名认证", "1008"),
 	AGENT_NOT_EXIST("该代理商目前不能注册", "1009"),
 	REGIST_FAILED("注册失败，请联系客服", "10010"),
+	LOGIN_NAME_NOT_EXIST("登录账号不存在", "10011"),
 	BALANCE_NOT_ENOUGH("余额不足", "2001"),
 	NO_EXIST_POSITION("交易失败，请重试", "2002"),
 	OPTIMISTIC_LOCK_ERROR("交易失败，请重试", "2003"),

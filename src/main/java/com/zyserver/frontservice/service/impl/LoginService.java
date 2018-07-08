@@ -344,6 +344,105 @@ public class LoginService implements ILoginService {
 		return responseJson;
 	}
 
+	@Override
+	public ResponseJson<Object> registrationByUserName(String phone, String userName, String password, String code) {
+		ResponseJson<Object> responseJson = new ResponseJson<>();
+		//if (DateUtil.isHoliday()){
+			//判断手机号是否已经被注册
+			Customer customer = cwpCustomerRepository.findByCustomerPhone(phone);
+			if(customer!=null){
+				responseJson.setCode(ApplicationError.CUSTOMER_PHONE_EXIST.getCode());
+				responseJson.setMsg(ApplicationError.CUSTOMER_PHONE_EXIST.getMessage());
+				return responseJson;
+			}
+			//判断验证码是否正确
+			/*responseJson = checkCode(phone,code);
+			if(!DEFAULT_ONE.equals(responseJson.getCode())){
+				return responseJson;
+			}*/
+			//查询User
+			User user1 = userRepository.findByUserName(userName);
+			if(null == user1 || user1.getStatus().equalsIgnoreCase("INVALID")){
+				responseJson.setCode(ApplicationError.LOGIN_NAME_NOT_EXIST.getCode());
+				responseJson.setMsg(ApplicationError.LOGIN_NAME_NOT_EXIST.getMessage());
+				return responseJson;
+			}
+			//查询代理商
+			Agent agent = agentRepository.findByLoginId(user1.getUserId());
+			//启用的代理才能注册
+			if(null == agent || agent.getStatus()==0){
+				responseJson.setCode(ApplicationError.AGENT_NOT_EXIST.getCode());
+				responseJson.setMsg(ApplicationError.AGENT_NOT_EXIST.getMessage());
+				return responseJson;
+			}
+			String group = "";
+			String source1 = "";
+			if("QL81035".equalsIgnoreCase(sa)){
+				User user = userRepository.findOne(agent.getLoginId());
+				group = user.getUserName();
+				source1 = "81035999";
+				log.info("sa="+sa+";pass="+sapass+";group="+user.getUserName());
+			}
+			log.info("sa="+sa+";pass="+sapass);
+			Result accountResult = HttpsUtil.createaccount(password,phone,sa,sapass,group);
+			log.info("开户返回码："+accountResult.getError().getCode()+";返回消息："+accountResult.getError().getMessage());
+			if(!"0".equals(accountResult.getError().getCode())){
+				responseJson.setCode(ApplicationError.REGIST_FAILED.getCode());
+				responseJson.setMsg(ApplicationError.REGIST_FAILED.getMessage());
+				return responseJson;
+			}
+
+			Result bondResult= HttpsUtil.setmarginrate(agent.getTemplateAccount(),accountResult.getAccount(),sa,sapass,source1);
+			log.info("保证金返回码："+bondResult.getError().getCode()+";返回消息："+bondResult.getError().getMessage());
+			if(!"0".equals(bondResult.getError().getCode())){
+				responseJson.setCode(ApplicationError.REGIST_FAILED.getCode());
+				responseJson.setMsg(ApplicationError.REGIST_FAILED.getMessage());
+				return responseJson;
+			}
+
+			Result serviceChargeResult = HttpsUtil.setcommissionrate(agent.getTemplateAccount(),accountResult.getAccount(),sa,sapass);
+			log.info("手续费返回码："+serviceChargeResult.getError().getCode()+";返回消息："+serviceChargeResult.getError().getMessage());
+			if(!"0".equals(serviceChargeResult.getError().getCode())){
+				responseJson.setCode(ApplicationError.REGIST_FAILED.getCode());
+				responseJson.setMsg(ApplicationError.REGIST_FAILED.getMessage());
+				return responseJson;
+			}
+
+			Result riskResult = HttpsUtil.setriskcontrol(agent.getTemplateAccount(),accountResult.getAccount(),sa,sapass,source1);
+			log.info("风控返回码："+riskResult.getError().getCode()+";返回消息："+riskResult.getError().getMessage());
+			if(!"0".equals(riskResult.getError().getCode())){
+				responseJson.setCode(ApplicationError.REGIST_FAILED.getCode());
+				responseJson.setMsg(ApplicationError.REGIST_FAILED.getMessage());
+				return responseJson;
+			}
+
+			Customer customer1 = new Customer();
+			customer1.setCustomerPhone(phone);
+			customer1.setAgentId(agent.getId());
+			customer1.setBusinessId(agent.getBusinessId());
+			customer1.setCustomerName(accountResult.getAccount());
+			customer1.setRegistTime(new Date());
+			customer1.setStatus(CustomerStatus.EFFECTIVE.getCode());
+			customer1.setSafe(getSafe());
+			customer1.setCustomerPassword(entryptPassword(password,customer1.getSafe()));
+			cwpCustomerRepository.save(customer1);
+			//往资金表中插入一条记录
+			Fund cwpFunds = new Fund();
+			cwpFunds.setCustomerId(customer1.getId());
+			cwpFunds.setBalance(new BigDecimal(DEFAULT_ZERO));
+			cwpFunds.setApplyAmount(INT_DEFAULT_ZERO);
+			cwpFunds.setInvestAmount(INT_DEFAULT_ZERO);
+			cwpFunds.setDepositBalance(new BigDecimal(DEFAULT_ZERO));
+			cwpFundsRepository.save(cwpFunds);
+		/*}else{
+			log.info("非股票交易时间");
+			responseJson.setCode(ApplicationError.TRADE_TIME_ERROR.getCode());
+			responseJson.setMsg(ApplicationError.TRADE_TIME_ERROR.getMessage());
+			return responseJson;
+		}*/
+		return responseJson;
+	}
+
 	/**
 	 * 获取安全的密码，生成随机的salt并经过1024次 sha-1 hash
 	 * @return

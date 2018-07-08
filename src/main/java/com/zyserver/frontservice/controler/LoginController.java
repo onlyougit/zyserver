@@ -82,6 +82,20 @@ public class LoginController {
     	return responseJson;
     }
 
+	@RequestMapping(value = "/registrationByUserName",method=RequestMethod.POST)
+	public ResponseJson<Object> registrationByUserName(String userName,String phone,String password,String code){
+		ResponseJson<Object> responseJson = new ResponseJson<>();
+		if(StringUtils.isEmpty(phone) ||
+				StringUtils.isEmpty(userName) ||
+				StringUtils.isEmpty(password) ||
+				StringUtils.isEmpty(code)){
+			responseJson.setCode(ApplicationError.PARAMETER_ERROR.getCode());
+			responseJson.setMsg(ApplicationError.PARAMETER_ERROR.getMessage());
+			return responseJson;
+		}
+		responseJson = loginService.registrationByUserName(phone,userName,password,code);
+		return responseJson;
+	}
 	/**
 	 * 用户实名认证
 	 * @param customer
