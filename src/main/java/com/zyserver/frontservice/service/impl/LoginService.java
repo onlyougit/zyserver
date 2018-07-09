@@ -345,9 +345,10 @@ public class LoginService implements ILoginService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseJson<Object> registrationByUserName(String phone, String userName, String password, String code) {
 		ResponseJson<Object> responseJson = new ResponseJson<>();
-		//if (DateUtil.isHoliday()){
+		if (DateUtil.isHoliday()){
 			//判断手机号是否已经被注册
 			Customer customer = cwpCustomerRepository.findByCustomerPhone(phone);
 			if(customer!=null){
@@ -356,10 +357,10 @@ public class LoginService implements ILoginService {
 				return responseJson;
 			}
 			//判断验证码是否正确
-			/*responseJson = checkCode(phone,code);
+			responseJson = checkCode(phone,code);
 			if(!DEFAULT_ONE.equals(responseJson.getCode())){
 				return responseJson;
-			}*/
+			}
 			//查询User
 			User user1 = userRepository.findByUserName(userName);
 			if(null == user1 || user1.getStatus().equalsIgnoreCase("INVALID")){
@@ -434,12 +435,12 @@ public class LoginService implements ILoginService {
 			cwpFunds.setInvestAmount(INT_DEFAULT_ZERO);
 			cwpFunds.setDepositBalance(new BigDecimal(DEFAULT_ZERO));
 			cwpFundsRepository.save(cwpFunds);
-		/*}else{
+		}else{
 			log.info("非股票交易时间");
 			responseJson.setCode(ApplicationError.TRADE_TIME_ERROR.getCode());
 			responseJson.setMsg(ApplicationError.TRADE_TIME_ERROR.getMessage());
 			return responseJson;
-		}*/
+		}
 		return responseJson;
 	}
 

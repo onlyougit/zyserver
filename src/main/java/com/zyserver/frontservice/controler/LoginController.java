@@ -82,6 +82,14 @@ public class LoginController {
     	return responseJson;
     }
 
+	/**
+	 * 用户注册通过代理登录账号
+	 * @param userName
+	 * @param phone
+	 * @param password
+	 * @param code
+	 * @return
+	 */
 	@RequestMapping(value = "/registrationByUserName",method=RequestMethod.POST)
 	public ResponseJson<Object> registrationByUserName(String userName,String phone,String password,String code){
 		ResponseJson<Object> responseJson = new ResponseJson<>();
