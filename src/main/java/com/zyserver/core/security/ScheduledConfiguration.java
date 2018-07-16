@@ -22,10 +22,10 @@ public class ScheduledConfiguration {
 	/**
 	 * 每天15：04，结算任务。
 	 */
-	@Scheduled(cron = "0 4 15 ? * *")
+	/*@Scheduled(cron = "0 4 15 ? * *")
 	public void settlementTask() {
 		scheduledService.settlementTask();
-	}
+	}*/
 
 	/**
 	 * 每天15：05，代理结算任务。
